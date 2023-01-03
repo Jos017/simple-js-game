@@ -16,6 +16,8 @@ btnDown.addEventListener('click', moveDown);
 
 let canvasSize;
 let elementsSize;
+let level = 0;
+let lives = 3;
 
 const playerPosition = {
   x: null,
@@ -52,7 +54,13 @@ function startGame() {
   game.textBaseline = 'bottom';
 
   // Obtain level map and turn into a 2D array
-  const map = maps[0];
+  const map = maps[level];
+
+  if (!map) {
+    gameWin();
+    return;
+  }
+
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
 
@@ -99,14 +107,13 @@ function drawPlayer() {
   });
 
   if (giftCollision) {
-    console.log('level up');
+    levelWin();
   }
 
   if (enemiesCollision) {
-    console.log('collision')
-  } else {
-    console.log()
+    levelFail();
   }
+
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
@@ -147,4 +154,26 @@ function moveByKeys(e) {
   else if (e.key === 'ArrowLeft') moveLeft();
   else if (e.key === 'ArrowRight') moveRight();
   else if (e.key === 'ArrowDown') moveDown();
+}
+
+function levelWin() {
+  console.log('level up');
+  level += 1;
+  startGame();
+}
+
+function levelFail() {
+  lives -= 1;
+  if (lives <= 0) {
+    lives = 3;
+    level = 0;
+  }
+  console.log(lives)
+  playerPosition.x = null;
+  playerPosition.y = null;
+  startGame();
+}
+
+function gameWin() {
+  console.log('Game win');
 }
