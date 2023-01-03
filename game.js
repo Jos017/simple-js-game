@@ -15,19 +15,22 @@ function startGame() {
   game.textAlign = 'start';
   game.textBaseline = 'bottom';
 
+  // Obtain level map and turn into a 2D array
   const map = maps[0];
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
 
-  for (let row = 0; row < 10; row++) {
-    for (let col = 0; col < 10; col++) {
+  // Draw emojis in canvas for current map
+  mapRowsCols.forEach((row, rowIndex) => {
+    row.forEach((col, colIndex) => {
+      const emoji = emojis[col];
       game.fillText(
-        emojis[mapRowsCols[row][col]],
-        elementsSize * col - elementsSize * 0.15,
-        elementsSize * row + elementsSize
+        emoji,
+        elementsSize * colIndex - elementsSize * 0.15,
+        elementsSize * rowIndex + elementsSize
       );
-    }
-  }
+    });
+  });
 }
 
 function setCanvasSize() {
