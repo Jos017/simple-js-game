@@ -22,6 +22,13 @@ const playerPosition = {
   y: null,
 };
 
+const giftPosition = {
+  x: null,
+  y: null,
+};
+
+let enemiesPosition = [];
+
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
     canvasSize = window.innerWidth * 0.8;
@@ -49,6 +56,7 @@ function startGame() {
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
 
+  enemiesPosition = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
 
   // Draw emojis in canvas for current map
@@ -65,15 +73,40 @@ function startGame() {
       ) {
         playerPosition.x = posX;
         playerPosition.y = posY;
+      } else if (col === 'I') {
+        giftPosition.x = posX;
+        giftPosition.y = posY;
+      } else if (col === 'X') {
+        enemiesPosition.push({
+          x: posX,
+          y: posY,
+        });
       }
       game.fillText(emoji, posX, posY);
     });
-
-    game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
   });
+  drawPlayer();
 }
 
 function drawPlayer() {
+  const giftCollX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3);
+  const giftCollY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
+  const giftCollision = giftCollX && giftCollY;
+  const enemiesCollision = enemiesPosition.find((enemy) => {
+    const enemyCollX = enemy.x.toFixed(2) === playerPosition.x.toFixed(2);
+    const enemyCollY = enemy.y.toFixed(2) === playerPosition.y.toFixed(2);
+    return enemyCollX && enemyCollY;
+  });
+
+  if (giftCollision) {
+    console.log('level up');
+  }
+
+  if (enemiesCollision) {
+    console.log('collision')
+  } else {
+    console.log()
+  }
   game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
