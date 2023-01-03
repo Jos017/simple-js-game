@@ -1,8 +1,18 @@
 const canvas = document.getElementById('game');
 const game = canvas.getContext('2d');
+const btnUp = document.getElementById('up');
+const btnLeft = document.getElementById('left');
+const btnRight = document.getElementById('right');
+const btnDown = document.getElementById('down');
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
+
+window.addEventListener('keydown', moveByKeys);
+btnUp.addEventListener('click', moveUp);
+btnLeft.addEventListener('click', moveLeft);
+btnRight.addEventListener('click', moveRight);
+btnDown.addEventListener('click', moveDown);
 
 let canvasSize;
 
@@ -44,4 +54,23 @@ function setCanvasSize() {
   canvas.setAttribute('height', canvasSize);
 
   startGame();
+}
+
+function moveUp() {
+  console.log('Up');
+}
+function moveLeft() {
+  console.log('Left');
+}
+function moveRight() {
+  console.log('Right');
+}
+function moveDown() {
+  console.log('Down');
+}
+function moveByKeys(e) {
+  if (e.key === 'ArrowUp') moveUp();
+  else if (e.key === 'ArrowLeft') moveLeft();
+  else if (e.key === 'ArrowRight') moveRight();
+  else if (e.key === 'ArrowDown') moveDown();
 }
