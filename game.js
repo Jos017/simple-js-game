@@ -6,6 +6,7 @@ const btnRight = document.getElementById('right');
 const btnDown = document.getElementById('down');
 const spanLives = document.getElementById('lives');
 const spanLevel = document.getElementById('level');
+const spanTime = document.getElementById('time');
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -20,6 +21,10 @@ let canvasSize;
 let elementsSize;
 let level = 0;
 let lives = 3;
+
+let timeStart;
+let timePlayer;
+let timeInterval;
 
 const playerPosition = {
   x: null,
@@ -61,6 +66,11 @@ function startGame() {
   if (!map) {
     gameWin();
     return;
+  }
+
+  if (!timeStart) {
+    timeStart = Date.now();
+    timeInterval = setInterval(showTime, 100);
   }
 
   showLevel();
@@ -171,6 +181,7 @@ function levelFail() {
   if (lives <= 0) {
     lives = 3;
     level = 0;
+    timeStart = null;
   }
   console.log(lives);
   playerPosition.x = null;
@@ -188,4 +199,8 @@ function showLives() {
 
 function showLevel() {
   spanLevel.innerHTML = level + 1;
+}
+
+function showTime() {
+  spanTime.innerHTML = Date.now() - timeStart;
 }
