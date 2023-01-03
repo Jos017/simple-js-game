@@ -4,6 +4,8 @@ const btnUp = document.getElementById('up');
 const btnLeft = document.getElementById('left');
 const btnRight = document.getElementById('right');
 const btnDown = document.getElementById('down');
+const spanLives = document.getElementById('lives');
+const spanLevel = document.getElementById('level');
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -61,9 +63,11 @@ function startGame() {
     return;
   }
 
+  showLevel();
+  showLives();
+
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
-
   enemiesPosition = [];
   game.clearRect(0, 0, canvasSize, canvasSize);
 
@@ -168,7 +172,7 @@ function levelFail() {
     lives = 3;
     level = 0;
   }
-  console.log(lives)
+  console.log(lives);
   playerPosition.x = null;
   playerPosition.y = null;
   startGame();
@@ -176,4 +180,12 @@ function levelFail() {
 
 function gameWin() {
   console.log('Game win');
+}
+
+function showLives() {
+  spanLives.innerHTML = emojis['HEART'].repeat(lives);
+}
+
+function showLevel() {
+  spanLevel.innerHTML = level + 1;
 }
