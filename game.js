@@ -11,16 +11,20 @@ function startGame() {
   const elementsSize = canvasSize / 10;
 
   // Configure size of elements in board
-  game.font = elementsSize + 'px Verdana';
+  game.font = elementsSize - 2 + 'px Verdana';
   game.textAlign = 'start';
   game.textBaseline = 'bottom';
 
-  for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
+  const map = maps[0];
+  const mapRows = map.trim().split('\n');
+  const mapRowsCols = mapRows.map((row) => row.trim().split(''));
+
+  for (let row = 0; row < 10; row++) {
+    for (let col = 0; col < 10; col++) {
       game.fillText(
-        emojis['X'],
-        elementsSize * i - elementsSize * 0.15,
-        elementsSize * j + elementsSize
+        emojis[mapRowsCols[row][col]],
+        elementsSize * col - elementsSize * 0.15,
+        elementsSize * row + elementsSize
       );
     }
   }
