@@ -15,10 +15,29 @@ btnRight.addEventListener('click', moveRight);
 btnDown.addEventListener('click', moveDown);
 
 let canvasSize;
+let elementsSize;
+
+const playerPosition = {
+  x: 0,
+  y: 0,
+};
+
+function setCanvasSize() {
+  if (window.innerHeight > window.innerWidth) {
+    canvasSize = window.innerWidth * 0.8;
+  } else {
+    canvasSize = window.innerHeight * 0.8;
+  }
+
+  canvas.setAttribute('width', canvasSize);
+  canvas.setAttribute('height', canvasSize);
+
+  startGame();
+}
 
 function startGame() {
   // Define cell size from canvas;
-  const elementsSize = canvasSize / 10;
+  elementsSize = canvasSize / 10;
 
   // Configure size of elements in board
   game.font = elementsSize - 2 + 'px Verdana';
@@ -34,39 +53,43 @@ function startGame() {
   mapRowsCols.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
       const emoji = emojis[col];
-      game.fillText(
-        emoji,
-        elementsSize * colIndex - elementsSize * 0.15,
-        elementsSize * rowIndex + elementsSize
-      );
+      const posX = elementsSize * colIndex - elementsSize * 0.15;
+      const posY = elementsSize * rowIndex + elementsSize;
+      // Asign initial player position
+      if (col === 'O') {
+        playerPosition.x = posX;
+        playerPosition.y = posY;
+      }
+      game.fillText(emoji, posX, posY);
     });
+
+    game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
   });
 }
 
-function setCanvasSize() {
-  if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8;
-  } else {
-    canvasSize = window.innerHeight * 0.8;
-  }
-
-  canvas.setAttribute('width', canvasSize);
-  canvas.setAttribute('height', canvasSize);
-
-  startGame();
+function drawPlayer() {
+  game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
 }
 
 function moveUp() {
   console.log('Up');
+  playerPosition.y -= elementsSize;
+  drawPlayer();
 }
 function moveLeft() {
   console.log('Left');
+  playerPosition.x -= elementsSize;
+  drawPlayer();
 }
 function moveRight() {
   console.log('Right');
+  playerPosition.x += elementsSize;
+  drawPlayer();
 }
 function moveDown() {
   console.log('Down');
+  playerPosition.y += elementsSize;
+  drawPlayer();
 }
 function moveByKeys(e) {
   if (e.key === 'ArrowUp') moveUp();
