@@ -7,6 +7,8 @@ const btnDown = document.getElementById('down');
 const spanLives = document.getElementById('lives');
 const spanLevel = document.getElementById('level');
 const spanTime = document.getElementById('time');
+const spanRecord = document.getElementById('record');
+const pResult = document.getElementById('result');
 
 window.addEventListener('load', setCanvasSize);
 window.addEventListener('resize', setCanvasSize);
@@ -75,6 +77,7 @@ function startGame() {
 
   showLevel();
   showLives();
+  showRecord();
 
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
@@ -171,7 +174,6 @@ function moveByKeys(e) {
 }
 
 function levelWin() {
-  console.log('level up');
   level += 1;
   startGame();
 }
@@ -183,7 +185,6 @@ function levelFail() {
     level = 0;
     timeStart = null;
   }
-  console.log(lives);
   playerPosition.x = null;
   playerPosition.y = null;
   startGame();
@@ -191,6 +192,21 @@ function levelFail() {
 
 function gameWin() {
   console.log('Game win');
+  clearInterval(timeInterval);
+
+  const recordTime = localStorage.getItem('record_time');
+  timePlayer = Date.now() - timeStart;
+  if (recordTime) {
+    if (recordTime >= timePlayer) {
+      localStorage.setItem('record_time', timePlayer);
+      pResult.innerHTML = 'New Record!!!';
+    } else {
+      pResult.innerHTML = 'No new record :(';
+    }
+  } else {
+    localStorage.setItem('record_time', timePlayer);
+    pResult.innerHTML = 'First Time, Good. Now beat your record';
+  }
 }
 
 function showLives() {
@@ -203,4 +219,8 @@ function showLevel() {
 
 function showTime() {
   spanTime.innerHTML = Date.now() - timeStart;
+}
+
+function showRecord() {
+  spanRecord.innerHTML = localStorage.getItem('record_time');
 }
