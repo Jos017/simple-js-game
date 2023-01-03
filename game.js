@@ -18,8 +18,8 @@ let canvasSize;
 let elementsSize;
 
 const playerPosition = {
-  x: 0,
-  y: 0,
+  x: null,
+  y: null,
 };
 
 function setCanvasSize() {
@@ -49,6 +49,8 @@ function startGame() {
   const mapRows = map.trim().split('\n');
   const mapRowsCols = mapRows.map((row) => row.trim().split(''));
 
+  game.clearRect(0, 0, canvasSize, canvasSize);
+
   // Draw emojis in canvas for current map
   mapRowsCols.forEach((row, rowIndex) => {
     row.forEach((col, colIndex) => {
@@ -56,7 +58,11 @@ function startGame() {
       const posX = elementsSize * colIndex - elementsSize * 0.15;
       const posY = elementsSize * rowIndex + elementsSize;
       // Asign initial player position
-      if (col === 'O') {
+      if (
+        col === 'O' &&
+        playerPosition.x === null &&
+        playerPosition.y === null
+      ) {
         playerPosition.x = posX;
         playerPosition.y = posY;
       }
@@ -72,24 +78,36 @@ function drawPlayer() {
 }
 
 function moveUp() {
-  console.log('Up');
-  playerPosition.y -= elementsSize;
-  drawPlayer();
+  if (playerPosition.y > elementsSize) {
+    playerPosition.y -= elementsSize;
+    startGame();
+  } else {
+    alert('Out of bounds');
+  }
 }
 function moveLeft() {
-  console.log('Left');
-  playerPosition.x -= elementsSize;
-  drawPlayer();
+  if (playerPosition.x > 0) {
+    playerPosition.x -= elementsSize;
+    startGame();
+  } else {
+    alert('Out of bounds');
+  }
 }
 function moveRight() {
-  console.log('Right');
-  playerPosition.x += elementsSize;
-  drawPlayer();
+  if (playerPosition.x < canvasSize - 2 * elementsSize) {
+    playerPosition.x += elementsSize;
+    startGame();
+  } else {
+    alert('Out of bounds');
+  }
 }
 function moveDown() {
-  console.log('Down');
-  playerPosition.y += elementsSize;
-  drawPlayer();
+  if (playerPosition.y < canvasSize) {
+    playerPosition.y += elementsSize;
+    startGame();
+  } else {
+    alert('Out of bounds');
+  }
 }
 function moveByKeys(e) {
   if (e.key === 'ArrowUp') moveUp();
